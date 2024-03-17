@@ -1,6 +1,7 @@
 ﻿using BulkyWeb.Data;
 using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace BulkyWeb.Controllers
 {
@@ -34,6 +35,39 @@ namespace BulkyWeb.Controllers
                 return RedirectToAction("Index");
             }
             return View();
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            Category? categoryFromDb = _db.Categories.Find(id);
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(categoryFromDb);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Category updatedCategory)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Update(updatedCategory);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(updatedCategory);
+            
         }
 
     }
