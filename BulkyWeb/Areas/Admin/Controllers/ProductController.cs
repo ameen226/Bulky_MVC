@@ -10,9 +10,11 @@ namespace BulkyWeb.Areas.Admin.Controllers
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
+            _webHostEnvironment = webHostEnvironment;
             _unitOfWork = unitOfWork;
         }
 
@@ -22,7 +24,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             return View(products);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
             
             ProductViewModel obj = new()
@@ -34,18 +36,57 @@ namespace BulkyWeb.Areas.Admin.Controllers
                     Value = c.Id.ToString()
                 })
             };
+
+            if (id == null || id == 0)
+            {
+                return View(obj);
+            }
+            else
+            {
+                obj.Product = _unitOfWork.Product.Get(p => p.Id == id);
+                return View(obj);
+            }
             
-            return View(obj);
         }
 
         [HttpPost]
-        public IActionResult Create(ProductViewModel obj)
+        public IActionResult Upsert(ProductViewModel obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj.Product);
+                if (obj.Product.Id == 0)
+                {
+                    //Guid fileName = new Guid();
+                    //string filePath = _webHostEnvironment.WebRootPath + "/images/product" + fileName;
+
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+
+                    if (file != null)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                        using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        obj.Product.ImageUrl = @"\images\product\" + fileName;
+
+                    }
+
+
+                    _unitOfWork.Product.Add(obj.Product);
+                    TempData["success"] = "Product created successfully";
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(obj.Product);
+                    TempData["success"] = "Product updated successfully";
+                }
+
                 _unitOfWork.Save();
-                TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
             else
@@ -58,39 +99,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 return View(obj);
             }
         }
-
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-
-            Product? product = _unitOfWork.Product.Get(p => p.Id == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(product);
-                _unitOfWork.Save();
-
-                TempData["success"] = "Product updated successfully";
-                return RedirectToAction("Index");
-            }
-
-            return View();
-        }
-
 
         public IActionResult Delete(int? id)
         {
