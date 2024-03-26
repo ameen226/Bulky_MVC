@@ -20,7 +20,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> products = _unitOfWork.Product.GetAll().ToList();
+            List<Product> products = _unitOfWork.Product.GetAll("Category").ToList();
             return View(products);
         }
 
@@ -30,7 +30,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             ProductViewModel obj = new()
             {
                 Product = new Product(),
-                CategoryList = _unitOfWork.Category.GetAll().Select(c => new SelectListItem
+                CategoryList = _unitOfWork.Category.GetAll("Category").Select(c => new SelectListItem
                 {
                     Text = c.Name,
                     Value = c.Id.ToString()
