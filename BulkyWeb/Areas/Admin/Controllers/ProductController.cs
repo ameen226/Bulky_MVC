@@ -54,29 +54,36 @@ namespace BulkyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (obj.Product.Id == 0)
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+
+                if (file != null)
                 {
-                    //Guid fileName = new Guid();
-                    //string filePath = _webHostEnvironment.WebRootPath + "/images/product" + fileName;
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
 
-                    string wwwRootPath = _webHostEnvironment.WebRootPath;
-
-
-                    if (file != null)
+                    if (!string.IsNullOrEmpty(obj.Product.ImageUrl))
                     {
-                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                        string productPath = Path.Combine(wwwRootPath, @"images\product");
+                        string oldFilePath = Path.Combine(wwwRootPath, obj.Product.ImageUrl.Trim('\\'));
 
-                        using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                        if (System.IO.File.Exists(oldFilePath))
                         {
-                            file.CopyTo(fileStream);
+                            System.IO.File.Delete(oldFilePath);
                         }
-
-                        obj.Product.ImageUrl = @"\images\product\" + fileName;
 
                     }
 
 
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    obj.Product.ImageUrl = @"\images\product\" + fileName;
+                }
+
+                if (obj.Product.Id == 0)
+                {
                     _unitOfWork.Product.Add(obj.Product);
                     TempData["success"] = "Product created successfully";
                 }
