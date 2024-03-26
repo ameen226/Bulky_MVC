@@ -20,7 +20,24 @@ namespace Bulky.DataAccess.Repository
 
         public void Update(Product obj)
         {
-            _db.Products.Update(obj);
+            Product product = _db.Products.FirstOrDefault(p => p.Id == obj.Id);
+            
+            if (product != null)
+            {
+                product.Title = obj.Title;
+                product.Description = obj.Description;
+                product.ISBN = obj.ISBN;
+                product.Price = obj.Price;
+                product.Price50 = obj.Price50;
+                product.ListPrice = obj.ListPrice;
+                product.Price100 = obj.Price100;
+                product.CategoryId = obj.CategoryId;
+                product.Author = obj.Author;
+                if (obj.ImageUrl != null)
+                {
+                    product.ImageUrl = obj.ImageUrl;
+                }
+            }
         }
     }
 }
