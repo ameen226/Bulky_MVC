@@ -5,7 +5,7 @@
 namespace Bulky.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCategoryForeignKeycolumn : Migration
+    public partial class AddImageUrlToProductTableAddCategoryForienKeyToProductTableSeedingProductTableWithData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,47 +17,54 @@ namespace Bulky.DataAccess.Migrations
                 nullable: false,
                 defaultValue: 0);
 
+            migrationBuilder.AddColumn<string>(
+                name: "ImageUrl",
+                table: "Products",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "Id",
                 keyValue: 1,
-                column: "CategoryId",
-                value: 2);
+                columns: new[] { "CategoryId", "ImageUrl" },
+                values: new object[] { 1, "" });
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "Id",
                 keyValue: 2,
-                column: "CategoryId",
-                value: 4);
+                columns: new[] { "CategoryId", "ImageUrl" },
+                values: new object[] { 2, "" });
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "Id",
                 keyValue: 3,
-                column: "CategoryId",
-                value: 10);
+                columns: new[] { "CategoryId", "ImageUrl" },
+                values: new object[] { 3, "" });
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "Id",
                 keyValue: 4,
-                column: "CategoryId",
-                value: 12);
+                columns: new[] { "CategoryId", "ImageUrl" },
+                values: new object[] { 1, "" });
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "Id",
                 keyValue: 5,
-                column: "CategoryId",
-                value: 14);
+                columns: new[] { "CategoryId", "ImageUrl" },
+                values: new object[] { 2, "" });
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "Id",
                 keyValue: 6,
-                column: "CategoryId",
-                value: 17);
+                columns: new[] { "CategoryId", "ImageUrl" },
+                values: new object[] { 3, "" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -86,6 +93,10 @@ namespace Bulky.DataAccess.Migrations
 
             migrationBuilder.DropColumn(
                 name: "CategoryId",
+                table: "Products");
+
+            migrationBuilder.DropColumn(
+                name: "ImageUrl",
                 table: "Products");
         }
     }
