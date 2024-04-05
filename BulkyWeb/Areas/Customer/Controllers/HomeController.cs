@@ -21,7 +21,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> products = _unitOfWork.Product.GetAll("Category");
+            IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties:"Category");
             return View(products);
         }
 
