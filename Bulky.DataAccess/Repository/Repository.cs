@@ -61,7 +61,7 @@ namespace Bulky.DataAccess.Repository
 
             if (filter != null)
             {
-                query.Where(filter);
+                query = query.Where(filter);
             }
 
             if (!string.IsNullOrEmpty(includeProperties))
