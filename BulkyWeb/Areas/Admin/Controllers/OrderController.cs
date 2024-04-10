@@ -27,9 +27,28 @@ namespace BulkyWeb.Areas.Admin.Controllers
 		#region API Call
 
 		[HttpGet]
-		public IActionResult GetAll()
+		public IActionResult GetAll(string? status)
 		{
-			List<OrderHeader> orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
+			IEnumerable<OrderHeader> orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
+
+			switch(status)
+			{
+				case "pending":
+					orderHeaders = orderHeaders.Where(o => o.PaymentStatus == SD.PaymentStatusPending);
+					break;
+				case "inprocess":
+					orderHeaders = orderHeaders.Where(o => o.OrderStatus == SD.StatusInProcess);
+					break;
+				case "completed":
+					orderHeaders = orderHeaders.Where(o => o.OrderStatus == SD.StatusShipped);
+					break;
+				case "approved":
+					orderHeaders = orderHeaders.Where(o => o.OrderStatus == SD.StatusApproved);
+					break;
+				default:
+					break;
+			}
+
 			return Json(new { data = orderHeaders });
 		}
 
