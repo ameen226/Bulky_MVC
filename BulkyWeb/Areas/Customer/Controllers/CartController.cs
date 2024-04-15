@@ -57,9 +57,10 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
         public IActionResult Minus(int cartId)
         {
-            var dbShoppingCart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId);
+            var dbShoppingCart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, isTracked: true);
             if (dbShoppingCart.Count <= 1)
             {
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(sh => sh.ApplicationUserId == dbShoppingCart.ApplicationUserId).Count() - 1);
                 _unitOfWork.ShoppingCart.Remove(dbShoppingCart);
             }
             else
@@ -75,9 +76,12 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
         public IActionResult Remove(int cartId)
         {
-            var dbShoppingCart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId);
-            _unitOfWork.ShoppingCart.Remove(dbShoppingCart);
+            var dbShoppingCart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, isTracked: true);
 
+            HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(sh => sh.ApplicationUserId == dbShoppingCart.ApplicationUserId).Count() - 1);
+
+            _unitOfWork.ShoppingCart.Remove(dbShoppingCart);
+            
             _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
