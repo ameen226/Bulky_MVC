@@ -55,6 +55,9 @@
                                     <li>
                                         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register" >Create User</a>
                                     </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">Manage User</a>
+                                    </li>
                                 </ul>
                             </li>
                         }
@@ -81,12 +84,15 @@
             BulkyWeb
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="//cdn.datatables.net/2.0.3/js/dataTables.min.js" asp-append-version="true"></script>
     <script src="https://cdn.tiny.cloud/1/36o3uo0ov4h01a2drg6tk132z6ll7hhu0qr2resibw0nribo/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
