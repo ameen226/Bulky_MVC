@@ -18,3 +18,20 @@ range of book selections, and securely make payments online.
 
 ## Application Record
 
+
+![Register](https://github.com/ameen226/Bulky_MVC/assets/56795675/b779c7fd-6e31-4bfe-8d66-4402806f22cf)
+
+![Check Out 1](https://github.com/ameen226/Bulky_MVC/assets/56795675/04758d31-083c-4de6-a375-746b0f8c9690)
+
+![Check Out 2](https://github.com/ameen226/Bulky_MVC/assets/56795675/0c054cf1-eda1-470e-957e-7e5def8b6649)
+
+![Products](https://github.com/ameen226/Bulky_MVC/assets/56795675/702f8d81-df56-4d34-8c1f-de6c237dd807)
+
+![Create Company](https://github.com/ameen226/Bulky_MVC/assets/56795675/e9ce2b50-d9c5-459e-8906-b4d51b7b79b6)
+
+
+
+
+
+
+
